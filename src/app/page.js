@@ -8,25 +8,29 @@ const Myrepos = () => {
   const [user, setUser] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleApiCall = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `https://api.github.com/users/${inputValue}/reposj`
+        `https://api.github.com/users/${inputValue}/repos`
       );
       console.log(response);
       if (!response.ok) {
         setApiData([]);
+        setLoading(false);
         setError("Something went wrong");
         return;
       }
 
       const data = await response.json();
       console.log("Fetched data:", data);
+      setLoading(false);
       setApiData(data);
     } catch (error) {
       console.error("Error:", error);
@@ -42,10 +46,12 @@ const Myrepos = () => {
     );
   }
 
+  console.log(apiData);
+
   return (
-    <div className="bg-gray-600 h-full bg-gradient-to-r from-slate-800 to-slate-400">
+    <div className="bg-gray-600 h-screen bg-gradient-to-r from-slate-800 to-slate-400">
       <div className="md:mx-96 flex justify-center items-center">
-        <form className="border rounded-3xl my-20 bg-white">
+        <div className="border rounded-3xl my-20 bg-white">
           <input
             type="text"
             placeholder="Github Username"
@@ -57,9 +63,15 @@ const Myrepos = () => {
             onClick={handleApiCall}
             className="cursor-pointer bg-slate-700 p-3 px-8 rounded-3xl text-white"
           >
-            <Link href="/">Submit</Link>
+            {loading ? (
+              <div className="spinner-container">
+                <div className="spinner"></div>
+              </div>
+            ) : (
+              "Submit"
+            )}
           </button>
-        </form>
+        </div>
       </div>
       <div className="m-16">
         <ul className="flex flex-wrap items-center justify-center gap-4 pb-20">
