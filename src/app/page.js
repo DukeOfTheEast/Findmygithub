@@ -1,39 +1,56 @@
 "use client";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Repo from "./repos/repo/page";
 
 const Myrepos = () => {
   const [apiData, setApiData] = useState([]);
   const [user, setUser] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState(null);
 
-  const userRef = useRef();
-
-  const getUser = () => {
-    setUser(userRef.current.value);
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
   };
 
-  const handleApiCall = () => {
-    fetch(`https://api.github.com/users/${user}/repos`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setApiData(data);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-    userRef.current.value = "";
+  const handleApiCall = async () => {
+    try {
+      const response = await fetch(
+        `https://api.github.com/users/${inputValue}/reposj`
+      );
+      console.log(response);
+      if (!response.ok) {
+        setApiData([]);
+        setError("Something went wrong");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Fetched data:", data);
+      setApiData(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setApiData([]);
+      setError(error.message || "Something went wrong");
+    }
   };
+  if (error) {
+    return (
+      <div className="bg-gray-600 h-screen bg-gradient-to-r grid place-content-center from-slate-800 to-slate-400">
+        <p className="text-red-500 text-xl font-bold">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-600 h-full bg-gradient-to-r from-slate-800 to-slate-400">
       <div className="md:mx-96 flex justify-center items-center">
         <form className="border rounded-3xl my-20 bg-white">
           <input
-            ref={userRef}
             type="text"
             placeholder="Github Username"
             className="border-2 focus:outline-none p-3 border-none rounded-3xl w-96 rounded-r-none"
-            onChange={getUser}
+            onChange={handleChange}
           />
 
           <button
