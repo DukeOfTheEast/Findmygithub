@@ -19,7 +19,7 @@ const Myrepos = () => {
       const response = await fetch(
         `https://api.github.com/users/${inputValue}/repos`
       );
-      console.log(response);
+
       if (!response.ok) {
         setApiData([]);
         setLoading(false);
@@ -28,11 +28,11 @@ const Myrepos = () => {
       }
 
       const data = await response.json();
-      console.log("Fetched data:", data);
+      // console.log("Fetched data:", data);
       setLoading(false);
       setApiData(data);
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
       setApiData([]);
       setError(error.message || "Something went wrong");
     }
@@ -45,7 +45,7 @@ const Myrepos = () => {
     );
   }
 
-  console.log(apiData);
+  // console.log(apiData);
 
   return (
     <div className="bg-gray-600 h-screen bg-gradient-to-r from-slate-800 to-slate-400">
