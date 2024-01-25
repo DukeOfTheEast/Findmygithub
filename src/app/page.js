@@ -5,7 +5,6 @@ import Repo from "./repos/repo/page";
 
 const Myrepos = () => {
   const [apiData, setApiData] = useState([]);
-  const [user, setUser] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -81,7 +80,7 @@ const Myrepos = () => {
               className="shadow-2xl bg-white p-5 rounded-md w-40 "
             >
               {/* <Link href={"/repos/repo"}> */}
-              <Link href={`https://github.com/${user}/${repo.name}`}>
+              <Link href={`https://github.com/${inputValue}/${repo.name}`}>
                 <h2 className="text-lg">{repo.name}</h2>
                 <h3>Size: {repo.size}</h3>
               </Link>
